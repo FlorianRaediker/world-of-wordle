@@ -1,0 +1,61 @@
+#share-input {
+  display: block;
+  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+  resize: none;
+  height: 10.5em;
+  width: 8em;
+}
+
+.reconstructor .solution {
+  text-transform: uppercase;
+}
+
+.reconstructor .row-reconstructor {
+  margin-top: 3em;
+  margin-bottom: 2.5em;
+}
+
+.reconstructor .row-reconstructor .wordle-row {
+  cursor: pointer;
+}
+
+.reconstructor .wordlists {
+  margin-top: 1em;
+  max-height: 300px;
+  overflow-y: scroll;
+  background-color: var(--color-tone-5);
+  transition: height 0.3s;
+}
+
+.reconstructor .wordlists[data-collapsed="true"] {
+  margin-top: 0;
+  height: 0;
+}
+
+.reconstructor .selectable-words {
+  margin-top: 1.2em;
+  margin-bottom: 1.2em;
+}
+
+.reconstructor .selectable-word {
+  display: inline-block;
+  cursor: pointer;
+  text-transform: uppercase;
+  border: 2px solid var(--color-tone-3);
+  padding: 0.3em;
+  margin: 0.2em;
+  font-family: monospace;
+}
+
+.reconstructor .selectable-word[data-enabled="false"] {
+  color: var(--color-tone-2);
+}
+
+.reconstructor .selectable-word[data-selected="true"] {
+  border: 2px solid var(--color-absent);
+  background: var(--color-absent);
+}
+
+.reconstructor .selectable-word[data-word=""]::before {
+  content: "❌";
+}

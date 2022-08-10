@@ -1,26 +1,19 @@
-import React from 'react';
-import logo from './logo.svg';
+import { useState } from 'react';
 import './App.css';
+import WordleReconstructor from "./WordleReconstructor";
 
-function App() {
+
+export default function App() {
+  const [letters, setLetters] = useState<string>();
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    /*<div>
+      <label htmlFor="wordle-date">Wordle on </label>
+      <input type="date" id="wordle-date" onChange={e => {
+        const wordle = getWordleOnDate(e.target.valueAsDate);
+        setLetters(wordle ? wordle : "     ");
+      }} />:
+      {letters ? <WordleRow letters={letters} states={Array(letters.length).fill(letters === "     " ? TileState.empty : TileState.correct)} /> : null}
+    </div>*/
+    <WordleReconstructor />
   );
 }
-
-export default App;
