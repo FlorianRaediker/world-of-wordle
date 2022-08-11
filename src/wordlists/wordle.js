@@ -1,4 +1,6 @@
-export const WORDLES = [
+/* copied from https://www.nytimes.com/games-assets/v2/wordle.abd1fd2537e27dd11aae0632be1272690ad688f5.js */
+
+export const SOLUTIONS = [
   'cigar',
   'rebut',
   'sissy',
@@ -12977,5 +12979,3 @@ export const WORDS = [
   'zymes',
   'zymic'
 ];
-
-export const WORDLES_SORTED = [...WORDLES].sort();

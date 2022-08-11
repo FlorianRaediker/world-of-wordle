@@ -1,25 +1,24 @@
 import { useState } from "react";
-import { getWordleById, WordleEvaluation, wordleIdToDate } from "./wordle/wordle";
-import { WORDLES, WORDLES_SORTED, WORDS } from "./wordle/wordlists";
-import "./WordleReconstructor.css";
+import { GAMES, WordEvaluation } from "./games";
 import WordleRow from "./WordleRow";
+import "./Reconstructor.css";
 
 
 function emojiToEvaluation(emoji: string) {
   return {
-    "⬛": WordleEvaluation.absent,
-    "🟨": WordleEvaluation.present,
-    "🟩": WordleEvaluation.correct
+    "⬛": WordEvaluation.absent,
+    "🟨": WordEvaluation.present,
+    "🟩": WordEvaluation.correct
   }[emoji] || null;
 }
 
-function wordMatchesEvaluation(solution: string, word: string, evaluation: Array<WordleEvaluation>) {
+function wordMatchesEvaluation(solution: string, word: string, evaluation: Array<WordEvaluation>) {
   if (!(solution.length === word.length && word.length === evaluation.length)) {
     throw new TypeError("solution, word, and evaluation should have the same length");
   }
   const solutionA = Array.from(solution);
   for (let i = 0; i < evaluation.length; i++) {
-    if (evaluation[i] === WordleEvaluation.correct) {
+    if (evaluation[i] === WordEvaluation.correct) {
       if (word[i] !== solution[i]) {
         return false;
       }
@@ -28,11 +27,11 @@ function wordMatchesEvaluation(solution: string, word: string, evaluation: Array
   }
   for (let i = 0; i < evaluation.length; i++) {
     switch (evaluation[i]) {
-      case WordleEvaluation.absent:
+      case WordEvaluation.absent:
         if (solution.includes(word[i]))
           return false;
         break;
-      case WordleEvaluation.present:
+      case WordEvaluation.present:
         const index = solutionA.indexOf(word[i]);
         if (word[i] === solution[i] || index === -1)
           return false;
@@ -48,7 +47,7 @@ interface Reconstructed {
   enabled: boolean
 }
 
-function RowReconstructor(props: { current: string | null, wordlists: Array<Array<Reconstructed>>, evaluation: Array<WordleEvaluation>, onSelect: (word: string) => any }) {
+function RowReconstructor(props: { current: string | null, wordlists: Array<Array<Reconstructed>>, evaluation: Array<WordEvaluation>, onSelect: (word: string) => any }) {
   const [collapsed, setCollapsed] = useState(false);
 
   function renderSelectableWord(word: string, enabled: boolean) {
@@ -86,7 +85,7 @@ function RowReconstructor(props: { current: string | null, wordlists: Array<Arra
 export default function WordleReconstructor(props: {}) {
   const [wordleId, setWordleId] = useState<number>(null);
   const [isHardMode, setIsHardMode] = useState<boolean>(null);
-  const [evaluations, setEvaluations] = useState<Array<Array<WordleEvaluation>>>(null);
+  const [evaluations, setEvaluations] = useState<Array<Array<WordEvaluation>>>(null);
   const [warning, setWarning] = useState<string>(null);
   const [selectedReconstructs, setSelectedReconstructs] = useState<Array<string>>(null);
 
@@ -114,14 +113,14 @@ export default function WordleReconstructor(props: {}) {
   }
 
   let solution: string;
-  let reconstructs: Array<{ evaluation: Array<WordleEvaluation>, wordlists: Array<Array<Reconstructed>> }>;
+  let reconstructs: Array<{ evaluation: Array<WordEvaluation>, wordlists: Array<Array<Reconstructed>> }>;
   if (wordleId) {
-    solution = getWordleById(wordleId);
+    solution = GAMES.wordle.getWordById(wordleId);
     reconstructs = evaluations.map(e => ({
       "evaluation": e,
       "wordlists": [
-        WORDLES_SORTED.filter(w => wordMatchesEvaluation(solution, w, e)).map(w => ({ word: w, enabled: true })),
-        WORDS.filter(w => wordMatchesEvaluation(solution, w, e)).map(w => ({ word: w, enabled: true }))
+        GAMES.wordle.solutionsSorted.filter(w => wordMatchesEvaluation(solution, w, e)).map(w => ({ word: w, enabled: true })),
+        GAMES.wordle.words[5].filter(w => wordMatchesEvaluation(solution, w, e)).map(w => ({ word: w, enabled: true }))
       ]
     }));
 
@@ -131,7 +130,7 @@ export default function WordleReconstructor(props: {}) {
         const selectedReconstruct = selectedReconstructs[r];
         if (selectedReconstruct) {
           for (let c = 0; c < evaluation.length; c++) {
-            if (evaluation[c] === WordleEvaluation.present) {
+            if (evaluation[c] === WordEvaluation.present) {
               // character selectedReconstruct[c] must be present in all following words
               for (let i = r+1; i < evaluations.length; i++) {
                 for (const wordlist of reconstructs[i].wordlists) {
@@ -159,7 +158,7 @@ export default function WordleReconstructor(props: {}) {
     {wordleId ?
       <div>
         Wordle ID: {wordleId}<br />
-        Date: {wordleIdToDate(wordleId).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br />
+        Date: {GAMES.wordle.getDateById(wordleId).toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}<br />
         Hard Mode: {isHardMode ? "enabled" : "disabled"}<br />
         Solution: <span className="solution">{solution}</span>
         {reconstructs.map((r, i) => <RowReconstructor current={selectedReconstructs[i]} wordlists={r.wordlists} evaluation={r.evaluation} onSelect={w => {

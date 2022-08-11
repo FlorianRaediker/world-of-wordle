@@ -1,9 +1,25 @@
 import { useState } from "react";
-import { TileAnimation, TileState, WordleEvaluation } from "./wordle/wordle";
+import { WordEvaluation } from "./games";
 import "./WordleRow.css";
 
+
+export enum TileState {
+  empty = "empty",
+  tbd = "tbd",
+  absent = "absent",
+  present = "present",
+  correct = "correct"
+}
+
+export enum TileAnimation {
+  PopIn = 'Tile-module_PopIn__bu7hb',
+  FlipIn = 'Tile-module_FlipIn__scjpz',
+  FlipOut = 'Tile-module_FlipOut__e4DRI'
+}
+
+
 function WordleTile(props: {
-  state: TileState | WordleEvaluation,
+  state: TileState | WordEvaluation,
   letter: string
 }) {
   const [animation, setAnimation] = useState("idle");
@@ -69,7 +85,7 @@ function WordleTile(props: {
 }*/
 
 export default function WordleRow(props: {
-  states?: Array<TileState | WordleEvaluation>
+  states?: Array<TileState | WordEvaluation>
   letters: string
 }) {
   if (props.states && props.states.length !== props.letters.length) {
