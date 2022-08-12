@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { WordEvaluation } from "./games";
+import { CharEvaluation } from "./games";
 import "./WordleRow.css";
 
 
@@ -19,7 +19,7 @@ export enum TileAnimation {
 
 
 function WordleTile(props: {
-  state: TileState | WordEvaluation,
+  state: TileState | CharEvaluation,
   letter: string
 }) {
   const [animation, setAnimation] = useState("idle");
@@ -85,7 +85,7 @@ function WordleTile(props: {
 }*/
 
 export default function WordleRow(props: {
-  states?: Array<TileState | WordEvaluation>
+  states?: Array<TileState | CharEvaluation>
   letters: string
 }) {
   if (props.states && props.states.length !== props.letters.length) {

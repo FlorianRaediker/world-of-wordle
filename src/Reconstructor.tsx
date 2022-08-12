@@ -1,16 +1,16 @@
 import { useState } from "react";
-import { Game, GAMES, HardMode, ShareInfo, WordEvaluation } from "./games";
+import { Game, GAMES, HardMode, ShareInfo, CharEvaluation } from "./games";
 import WordleRow from "./WordleRow";
 import "./Reconstructor.css";
 
 
-function wordMatchesEvaluation(solution: string, word: string, evaluation: WordEvaluation[]) {
+function wordMatchesEvaluation(solution: string, word: string, evaluation: CharEvaluation[]) {
   if (!(solution.length === word.length && word.length === evaluation.length)) {
     throw new TypeError(`solution (${solution}), word (${word}), and evaluation (${evaluation}) should have the same length`);
   }
   const solutionA = Array.from(solution);
   for (let i = 0; i < evaluation.length; i++) {
-    if (evaluation[i] === WordEvaluation.Correct) {
+    if (evaluation[i] === CharEvaluation.Correct) {
       if (word[i] !== solution[i]) {
         return false;
       }
@@ -19,11 +19,11 @@ function wordMatchesEvaluation(solution: string, word: string, evaluation: WordE
   }
   for (let i = 0; i < evaluation.length; i++) {
     switch (evaluation[i]) {
-      case WordEvaluation.Absent:
+      case CharEvaluation.Absent:
         if (solution.includes(word[i]))
           return false;
         break;
-      case WordEvaluation.Present:
+      case CharEvaluation.Present:
         const index = solutionA.indexOf(word[i]);
         if (word[i] === solution[i] || index === -1)
           return false;
@@ -39,11 +39,11 @@ interface Reconstructed {
   enabled: boolean
 }
 
-function RowReconstructor(props: { current: string | null, wordlists: Reconstructed[][], evaluation: WordEvaluation[], onSelect: (word: string) => any }) {
+function RowReconstructor(props: { current: string | null, wordlists: Reconstructed[][], evaluation: CharEvaluation[], onSelect: (word: string) => any }) {
   const [collapsed, setCollapsed] = useState(false);
 
   function renderSelectableWord(word: string, enabled: boolean) {
-    return <span className="selectable-word" data-word={word || ""} data-enabled={enabled} data-selected={word === props.current} onClick={() => props.onSelect(word)}>{word}</span>;
+    return <span className="selectable-word" data-word={word || ""} data-enabled={enabled} data-selected={word === props.current} onClick={() => props.onSelect(word)} key={word}>{word}</span>;
   }
 
   function renderSelectableWords(words: Reconstructed[]) {
@@ -97,7 +97,7 @@ export default function WordleReconstructor(props: {}) {
   }
 
   let solution: string;
-  let reconstructs: { evaluation: WordEvaluation[], wordlists: Reconstructed[][] }[];
+  let reconstructs: { evaluation: CharEvaluation[], wordlists: Reconstructed[][] }[];
   if (info && !("error" in info)) {
     solution = info.solution || enteredSolution;
     if (solution && solution.length === info.evaluations[0].length) {
@@ -115,13 +115,66 @@ export default function WordleReconstructor(props: {}) {
           const selectedReconstruct = selectedReconstructs[r];
           if (selectedReconstruct) {
             for (let c = 0; c < evaluation.length; c++) {
-              if (evaluation[c] === WordEvaluation.Present) {
+              if (evaluation[c] === CharEvaluation.Present) {
                 // character selectedReconstruct[c] must be present in all following words
                 for (let i = r + 1; i < info.evaluations.length; i++) {
                   for (const wordlist of reconstructs[i].wordlists) {
                     for (const reconstruct of wordlist) {
                       if (!reconstruct.word.includes(selectedReconstruct[c])) {
                         reconstruct.enabled = false;
+                      }
+                    }
+                  }
+                }
+              } else if (game.hardMode === HardMode.Strict && evaluation[c] === CharEvaluation.Absent) {
+                // evaluation for character selectedReconstruct[c] must not be "absent" in all other words
+                for (let i = 0; i < info.evaluations.length; i++) {
+                  if (i === r) continue;
+                  for (const wordlist of reconstructs[i].wordlists) {
+                    for (const reconstruct of wordlist) {
+                      for (let j = 0; j < reconstruct.word.length; j++) {
+                        if (info.evaluations[i][j] === CharEvaluation.Absent && reconstruct.word[j] === selectedReconstruct[c]) {
+                          reconstruct.enabled = false;
+                          break;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+            if (game.hardMode === HardMode.Lax || game.hardMode === HardMode.Strict) {
+              // all characters from previous words with evaluation "present" must also have evaluation "present" or "correct" in selectedReconstruct
+              // in HardMode.Strict, characters with evaluation "present" must have different indices
+              const correctChars = [];
+              const presentChars = [];
+              for (let i = 0; i < selectedReconstruct.length; i++) {
+                if (evaluation[i] === CharEvaluation.Correct) {
+                  correctChars.push(selectedReconstruct[i]);
+                } else if (evaluation[i] === CharEvaluation.Present) {
+                  presentChars.push(selectedReconstruct[i]);
+                }
+              }
+              for (let i = 0; i < r; i++) {
+                for (const wordlist of reconstructs[i].wordlists) {
+                  for (const reconstruct of wordlist) {
+                    const correctCharsCopy = [...correctChars];
+                    const presentCharsCopy = [...presentChars];
+                    for (let j = 0; j < reconstruct.word.length; j++) {
+                      if (info.evaluations[i][j] === CharEvaluation.Present) {
+                        const char = reconstruct.word[j];
+                        if (game.hardMode === HardMode.Strict && char === selectedReconstruct[j]) {
+                          reconstruct.enabled = false;
+                          break;
+                        }
+                        if (correctCharsCopy.includes(char)) {
+                          correctCharsCopy.splice(correctCharsCopy.indexOf(char), 1);
+                        } else if (presentCharsCopy.includes(char)) {
+                          presentCharsCopy.splice(presentCharsCopy.indexOf(char), 1);
+                        } else {
+                          reconstruct.enabled = false;
+                          break;
+                        }
                       }
                     }
                   }

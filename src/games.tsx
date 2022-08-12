@@ -4,7 +4,7 @@ import { SOLUTIONS as WORDLEDEUTSCH_SOLUTIONS, WORDS as WORDLEDEUTSCH_WORDS } fr
 import { SOLUTIONS as WORDLE_AT_SOLUTIONS, WORDS as WORDLE_AT_WORDS} from "./wordlists/wordle_at";
 
 
-export enum WordEvaluation {
+export enum CharEvaluation {
   Absent = "absent",
   Present = "present",
   Correct = "correct"
@@ -22,7 +22,7 @@ export type ShareInfo = (
   {
     tries: number
     isHardMode: boolean
-    evaluations: WordEvaluation[][]
+    evaluations: CharEvaluation[][]
     // the following only exist if the game has ids (DailyGame)
     wordId?: number
     solution?: string
@@ -52,10 +52,10 @@ export abstract class Game {
 
   protected emojiToEvaluation(emoji: string) {
     return {
-      "⬛": WordEvaluation.Absent,
-      "⬜": WordEvaluation.Absent,
-      "🟨": WordEvaluation.Present,
-      "🟩": WordEvaluation.Correct
+      "⬛": CharEvaluation.Absent,
+      "⬜": CharEvaluation.Absent,
+      "🟨": CharEvaluation.Present,
+      "🟩": CharEvaluation.Correct
     }[emoji] || null;
   }
 

@@ -16,22 +16,18 @@ export default function WordSpy(props: {}) {
   if (idOrDate instanceof Date) {
     id = game.getIdOnDate(idOrDate);
     date = idOrDate;
-    console.log(date);
   } else {
     id = idOrDate;
     date = game.getDateById(idOrDate);
-    console.log("date by id", date);
   }
   const word = game.getSolutionById(id);
-  
-  console.log("iso", date.toISOString());
 
   return <div>
     <select onChange={e => {setIdOrDate(date); setGameId(e.target.value); }}>
       {GAMES.filter(game => game instanceof DailyGame).map(game => <option value={game.id} key={game.id}>{game.name}</option>)}
     </select>
     <span> on </span>
-    <input type="date" value={date.toISOString().substring(0, 10)} onChange={e => {console.log("set date", date);setIdOrDate(e.target.valueAsDate)}} />
+    <input type="date" value={date.toISOString().substring(0, 10)} onChange={e => setIdOrDate(e.target.valueAsDate)} />
     <span> with ID </span>
     <input type="number" value={id} onChange={e => setIdOrDate(e.target.valueAsNumber)} />
     :
