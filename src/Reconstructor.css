@@ -3,7 +3,11 @@
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   resize: none;
   height: 10.5em;
-  width: 8em;
+  width: 12em;
+}
+
+.reconstructor .share-info {
+  display: block;
 }
 
 .reconstructor .solution {
