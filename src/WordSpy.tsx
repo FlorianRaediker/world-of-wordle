@@ -13,7 +13,10 @@ export default function WordSpy(props: {}) {
 
   let id: number;
   let date: Date;
-  if (idOrDate instanceof Date) {
+  if (idOrDate === null) {
+    id = null;
+    date = null;
+  } else if (idOrDate instanceof Date) {
     id = game.getIdOnDate(idOrDate);
     date = idOrDate;
   } else {
@@ -27,9 +30,9 @@ export default function WordSpy(props: {}) {
       {GAMES.filter(game => game instanceof DailyGame).map(game => <option value={game.id} key={game.id}>{game.name}</option>)}
     </select>
     <span> on </span>
-    <input type="date" value={date.toISOString().substring(0, 10)} onChange={e => setIdOrDate(e.target.valueAsDate)} />
+    <input type="date" value={date ? date.toISOString().substring(0, 10) : null} onChange={e => setIdOrDate(e.target.valueAsDate)} />
     <span> with ID </span>
-    <input type="number" value={id} onChange={e => setIdOrDate(e.target.valueAsNumber)} />
+    <input type="number" value={id ? id : ""} onChange={e => setIdOrDate(e.target.valueAsNumber ? e.target.valueAsNumber : null)} />
     :
     {word ? <WordleRow letters={word} states={Array(word.length).fill(word ? TileState.correct : TileState.empty)} /> : null}
   </div>;

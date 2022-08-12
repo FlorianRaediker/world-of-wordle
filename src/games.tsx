@@ -150,10 +150,7 @@ class Wordle extends DailyGame {
   }
 
   getDateById(id: number) {
-    var ke = new Date(2021, 5, 19, 0, 0, 0, 0);
-    ke.setUTCHours(0, 0, 0, 0);
-    ke.setDate(ke.getDate() + id + 1);
-    return ke;
+    return new Date(Date.UTC(2021, 5, 19) + id * 86400000);  // 86400000ms = 1day
   }
 }
 
@@ -219,7 +216,7 @@ class WordleAt extends DailyGame {
       };
     }
 
-    return app["getTodaysGameData"]()["solution"];
+    return app["getTodaysGameData"]()["solution"].join("");
   }
 
   getIdOnDate(date: Date): number {
@@ -251,10 +248,7 @@ class WordleAt extends DailyGame {
   }
 
   getDateById(id: number): Date {
-    const date = new Date(2022, 1, 2, 0, 0, 0, 0);
-    date.setUTCHours(0, 0, 0, 0);
-    date.setDate(date.getDate() + id - 228 + 1);
-    return date;
+    return new Date(Date.UTC(2022, 1, 2) + (id-228) * 86400000);  // 86400000ms = 1day
   }
 }
 
@@ -291,10 +285,7 @@ class Taylordle extends DailyGame {
   }
 
   getDateById(id: number) {
-    const date = new Date(2022, 0, 28, 0, 0, 0, 0);
-    date.setUTCHours(0, 0, 0, 0);
-    date.setDate(date.getDate() + id);
-    return date;
+    return new Date(Date.UTC(2022, 0, 28) + id * 86400000);  // 86400000ms = 1day
   }
 }
 
