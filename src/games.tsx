@@ -1,12 +1,20 @@
 import { SOLUTIONS as WORDLE_SOLUTIONS, WORDS as WORDLE_WORDS } from "./wordlists/wordle";
 import { SOLUTIONS as TAYLORDLE_SOLUTIONS, WORDS as TAYLORDLE_WORDS } from "./wordlists/taylordle";
-import { SOLUTIONS as WORDLEDEUTSCH_SOLUTIONS, WORDS as WORDLEDEUTSCH_WORDS} from "./wordlists/wordledeutsch";
+import { SOLUTIONS as WORDLEDEUTSCH_SOLUTIONS, WORDS as WORDLEDEUTSCH_WORDS } from "./wordlists/wordledeutsch";
+import { SOLUTIONS as WORDLE_AT_SOLUTIONS, WORDS as WORDLE_AT_WORDS} from "./wordlists/wordle_at";
 
 
 export enum WordEvaluation {
-  absent = "absent",
-  present = "present",
-  correct = "correct"
+  Absent = "absent",
+  Present = "present",
+  Correct = "correct"
+}
+
+
+export enum HardMode {
+  None, // Game has no hard mode
+  Lax,  // Game has a hard mode, but only revealed present and correct hints must be used
+  Strict  // Game has a hard mode, and all three hint types must be used
 }
 
 
@@ -39,15 +47,15 @@ export abstract class Game {
   abstract readonly solutions: string[] /* sorted alphabetically */
   abstract readonly words: Record<number, string[]> /* one entry for each word length; words sorted alphabetically */
   abstract readonly totalTries: number
-  abstract readonly hasHardMode: boolean
+  abstract readonly hardMode: HardMode
   protected abstract readonly shareTextRegex: RegExp
 
   protected emojiToEvaluation(emoji: string) {
     return {
-      "⬛": WordEvaluation.absent,
-      "⬜": WordEvaluation.absent,
-      "🟨": WordEvaluation.present,
-      "🟩": WordEvaluation.correct
+      "⬛": WordEvaluation.Absent,
+      "⬜": WordEvaluation.Absent,
+      "🟨": WordEvaluation.Present,
+      "🟩": WordEvaluation.Correct
     }[emoji] || null;
   }
 
@@ -58,7 +66,7 @@ export abstract class Game {
       const tries = match.groups.tries !== "X" ? parseInt(match.groups.tries) : -1;
       const totalTries = parseInt(match.groups.totalTries);
       const isHardMode = match.groups.hardMode === "*";
-      if (isHardMode && !this.hasHardMode) {
+      if (isHardMode && !this.hardMode) {
         warning = `Share indicates Hard Mode, but ${this.name} has no Hard Mode`;
       } else if (totalTries !== this.totalTries) {
         warning = `Share indicates ${totalTries} total guesses, but ${this.name} gives ${this.totalTries}`;
@@ -110,7 +118,7 @@ class Wordle extends DailyGame {
   solutions = [...WORDLE_SOLUTIONS].sort()
   words = { 5: WORDLE_WORDS }
   totalTries = 6
-  hasHardMode = true
+  hardMode = HardMode.Lax
   shareTextRegex = /Wordle\s+(?<id>\d+)\s+(?<tries>\d+|X)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?<guesses>(?:[⬛🟨🟩]{2,}\n)*[⬛🟨🟩]{2,})/iu
 
   getSolutionById(id: number) {
@@ -154,10 +162,100 @@ class WordleDeutsch extends Game {
   name = "Wordle Deutsch"
   url = "https://wordledeutsch.org"
   solutions = [...WORDLEDEUTSCH_SOLUTIONS].sort()
-  words = {5: WORDLEDEUTSCH_WORDS}
+  words = { 5: WORDLEDEUTSCH_WORDS }
   totalTries = 6
-  hasHardMode = true
+  hardMode = HardMode.Lax
   shareTextRegex = /Wordle Deutsch\.?\s+(?<tries>\d+|X)\s+von\s+(?<totalTries>\d+)\s+Versuchen(?<hardMode>\*?)\s+(?<guesses>(?:[⬛⬜🟨🟩]{2,}\n)*[⬛⬜🟨🟩]{2,})/iu
+
+  getWordById(id: number): string {
+    throw new Error("Method not implemented.");
+  }
+
+  getIdOnDate(date: Date): number {
+    throw new Error("Method not implemented.");
+  }
+
+  getDateById(id: number): Date {
+    throw new Error("Method not implemented.");
+  }
+}
+
+class WordleAt extends DailyGame {
+  id = "wordle_at"
+  name = "wordle.at"
+  url = "https://wordle.at"
+  solutions = [...WORDLE_AT_SOLUTIONS].sort()
+  words = {5: WORDLE_AT_WORDS}
+  totalTries = 6
+  hardMode = HardMode.Strict
+  protected shareTextRegex = /Wördl\s+(?<id>\d+)\s+(?<tries>\d+|X)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?:🔥\d+\s+)?\s+(?<guesses>(?:[⬛⬜🟨🟩]{2,}\n)*[⬛⬜🟨🟩]{2,})/ui
+
+  getSolutionById(id: number): string {
+    const app = {getDayId: () => id};
+    const fp = num => ({
+      454: "hardModeInterruption",
+      421: "getDayId",
+      327: "length",
+      511: "split"
+    }[num]);
+    const solutions = WORDLE_AT_SOLUTIONS;
+
+    /* copied from https://wordle.at/main.js?v=3.9.4 */
+    app['getTodaysGameData'] = function () {
+      const faL = {
+        a: 454
+      },
+      O = fp;
+      this[O(faL.a)] = ![];
+      let a = 0,
+      b = this[O(421)](),
+      // @ts-ignore
+      solutionString = solutions[(b + a) % solutions[O(327)]],
+      // @ts-ignore
+      solution = solutionString[O(511)]('');
+      return {
+        'dayId': b,
+        'solution': solution
+      };
+    }
+
+    return app["getTodaysGameData"]()["solution"];
+  }
+
+  getIdOnDate(date: Date): number {
+    date = new Date(date);
+    const app = {};
+    const fp = num => ({
+      421: "getDayId",
+      416: "2022-02-02",
+      260: "setHours",
+      550: "round"
+    }[num]);
+
+    /* copied from https://wordle.at/main.js?v=3.9.4 */
+    app[fp(421)] = function () {
+      const faw = {
+        a: 550
+      },
+      z = fp;
+      let a = 228,
+      b = new Date(z(416)),
+      c = date;//new Date();
+      c[z(260)](0);
+      // @ts-ignore
+      let d = Math[z(faw.a)]((c - b) / (24 * 60 * 60 * 1000));
+      return d + a;
+    }
+
+    return app["getDayId"]();
+  }
+
+  getDateById(id: number): Date {
+    const date = new Date(2022, 1, 2, 0, 0, 0, 0);
+    date.setUTCHours(0, 0, 0, 0);
+    date.setDate(date.getDate() + id - 228 + 1);
+    return date;
+  }
 }
 
 
@@ -168,7 +266,7 @@ class Taylordle extends DailyGame {
   solutions = [...TAYLORDLE_SOLUTIONS].sort()
   words = TAYLORDLE_WORDS
   totalTries = 6
-  hasHardMode = false
+  hardMode = HardMode.None
   shareTextRegex = /Taylordle\s+(?<id>\d+)\s+(?<tries>\d+)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?<guesses>(?:[⬜🟨🟩]{2,}\n)*[⬜🟨🟩]{2,})/iu
 
   getSolutionById(id: number) {
@@ -202,10 +300,11 @@ class Taylordle extends DailyGame {
 
 export const WORDLE = new Wordle();
 
-const ID_TO_GAME: {[key: string]: Game} = {
-  wordle: WORDLE,
-  wordledeutsch: new WordleDeutsch(),
-  taylordle: new Taylordle(),
-};
+export const GAMES: Game[] = [
+  WORDLE,
+  new WordleDeutsch(),
+  new WordleAt(),
+  new Taylordle(),
+];
 
-export const GAMES: Game[] = Object.values(ID_TO_GAME);
+const ID_TO_GAME: { [key: string]: Game } = Object.fromEntries(GAMES.map(g => [g.id, g]));

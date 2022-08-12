@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Game, GAMES, ShareInfo, WordEvaluation } from "./games";
+import { Game, GAMES, HardMode, ShareInfo, WordEvaluation } from "./games";
 import WordleRow from "./WordleRow";
 import "./Reconstructor.css";
 
@@ -10,7 +10,7 @@ function wordMatchesEvaluation(solution: string, word: string, evaluation: WordE
   }
   const solutionA = Array.from(solution);
   for (let i = 0; i < evaluation.length; i++) {
-    if (evaluation[i] === WordEvaluation.correct) {
+    if (evaluation[i] === WordEvaluation.Correct) {
       if (word[i] !== solution[i]) {
         return false;
       }
@@ -19,11 +19,11 @@ function wordMatchesEvaluation(solution: string, word: string, evaluation: WordE
   }
   for (let i = 0; i < evaluation.length; i++) {
     switch (evaluation[i]) {
-      case WordEvaluation.absent:
+      case WordEvaluation.Absent:
         if (solution.includes(word[i]))
           return false;
         break;
-      case WordEvaluation.present:
+      case WordEvaluation.Present:
         const index = solutionA.indexOf(word[i]);
         if (word[i] === solution[i] || index === -1)
           return false;
@@ -115,7 +115,7 @@ export default function WordleReconstructor(props: {}) {
           const selectedReconstruct = selectedReconstructs[r];
           if (selectedReconstruct) {
             for (let c = 0; c < evaluation.length; c++) {
-              if (evaluation[c] === WordEvaluation.present) {
+              if (evaluation[c] === WordEvaluation.Present) {
                 // character selectedReconstruct[c] must be present in all following words
                 for (let i = r + 1; i < info.evaluations.length; i++) {
                   for (const wordlist of reconstructs[i].wordlists) {
@@ -156,7 +156,7 @@ export default function WordleReconstructor(props: {}) {
           </span> : null}
 
         {info.date ? <span className="share-info">Date: {info.date.toLocaleDateString(undefined, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' })}</span> : null}
-        {game.hasHardMode ? <span className="share-info">Hard Mode: {info.isHardMode ? "enabled" : "disabled"}</span> : null}
+        {game.hardMode !== HardMode.None ? <span className="share-info">Hard Mode: {info.isHardMode ? "enabled" : "disabled"}</span> : null}
         {info.solution ? <span className="share-info">Solution: <span className="solution">{info.solution}</span></span> : null}
         {reconstructs ? reconstructs.map((r, i) =>
           <RowReconstructor current={selectedReconstructs[i]} wordlists={r.wordlists} evaluation={r.evaluation} onSelect={w => {
