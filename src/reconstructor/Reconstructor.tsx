@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { Game, GAMES, HardMode, ShareInfo, CharEvaluation } from "./games";
-import WordleRow from "./WordleRow";
+import { Game, GAMES, HardMode, ShareInfo, CharEvaluation } from "../games";
+import WordleRow from "../board";
 import "./Reconstructor.css";
 
 
@@ -188,8 +188,6 @@ export default function WordleReconstructor(props: {}) {
   }
 
   return <div className="reconstructor">
-    <h2>Wordle Reconstructor</h2>
-
     <label htmlFor="share-input">Insert shareable Wordle result:</label>
     <textarea
       id="share-input"

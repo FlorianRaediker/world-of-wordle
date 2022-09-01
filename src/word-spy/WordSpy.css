@@ -1,0 +1,33 @@
+
+.word-spy h2 {
+  text-align: center;
+}
+
+.word-spy .inputs {
+  width: max-content;
+  margin: 2em auto 0 auto;
+}
+
+.word-spy .inputs div {
+  margin-bottom: .5em;
+}
+
+.word-spy .label {
+  display: inline-block;
+  padding-right: .3em;
+  width: 4em;
+  text-align: right;
+}
+
+.word-spy .date-input {
+  width: 8.5em;
+}
+
+.word-spy .id-input {
+  width: 4em;
+}
+
+.word-spy .result {
+  margin: 2em auto 0 auto;
+  max-width: 400px;
+}

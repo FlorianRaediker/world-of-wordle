@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { CharEvaluation } from "./games";
-import "./WordleRow.css";
+import "./board.css";
 
 
 export enum TileState {
@@ -41,7 +41,7 @@ function WordleTile(props: {
         // n && s.current && void 0 !== t && r(Co(t)))
       }
     }}>
-    {props.letter}
+      <span className="letter">{props.letter}</span>
   </div>;
 }
 
@@ -95,7 +95,7 @@ export default function WordleRow(props: {
   for (let i = 0; i < props.letters.length; i++) {
     tiles.push(<WordleTile letter={props.letters[i]} state={props.states ? props.states[i] : TileState.empty} key={i} />);
   }
-  return <div className="wordle-row">
+  return <div className="wordle-row" data-tile-count={props.letters.length}>
     {tiles}
   </div>;
 }

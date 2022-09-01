@@ -1,8 +1,52 @@
 .wordle-row {
+  display: flex;
+  width: 100%;
+  /*gap: 10px;*/
+  user-select: none;
+  --wordle-row-max-width: 550px;
+}
+
+.wordle-tile {
+  flex: 1 0 0;
+  color: var(--board-color);
+  
+}
+.wordle-tile .letter {
+  font-size: 2em;
+  font-weight: bold;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1 / 1;
+}
+
+.wordle-tile .letter {
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.wordle-tile[data-state="empty"] .letter {
+  background-color: var(--color-empty);
+}
+
+.wordle-tile[data-state="absent"] .letter {
+  background-color: var(--color-absent);
+}
+
+.wordle-tile[data-state="present"] .letter {
+  background-color: var(--color-present);
+}
+
+.wordle-tile[data-state="correct"] .letter {
+  background-color: var(--color-correct);
+}
+
+/*.wordle-row {
   max-width: 350px;
 }
 
-/* copied from https://www.nytimes.com/games-assets/v2/wordle.ad4d1f42a5aee771f8d6557988a5fb7e99877fdc.css */
+/* copied from https://www.nytimes.com/games-assets/v2/wordle.ad4d1f42a5aee771f8d6557988a5fb7e99877fdc.css * /
 .wordle-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
@@ -143,3 +187,4 @@
     transform: rotateX(0);
   }
 }
+*/

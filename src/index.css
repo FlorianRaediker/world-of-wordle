@@ -1,3 +1,68 @@
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+
+:root {
+  --text-color: black;
+  --tagline-color: #555;
+  --footer-color: #464646;
+  --footer-bg: #dfdfdf;
+
+  --form-color: #212529;
+  --form-border: 1px solid #9c9c9c;
+  --form-focus-color: var(--form-color);
+  --form-focus-border: 1px solid #484848;
+  --form-focus-box-shadow: 0 0 0 0.2rem #00000040;
+
+  --board-color: white;
+  --color-correct: #68a963;
+  --color-present: #f0c105;
+  --color-absent: #787c7e;
+  --color-empty: #f3f3f3;
+}
+
+body {
+  font-family: "Clear Sans", "Helvetica Neue", Cantarell, Arial, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.bi {
+  width: 1em;
+  height: 1em;
+  vertical-align: -.125em;
+}
+
+select,
+input {
+  display: inline-block;
+  padding: .375rem;
+  color: var(--form-color);
+  background-color: inherit;
+  border: var(--form-border);
+  font: inherit;
+  appearance: none;
+}
+
+select {
+  padding: .375rem 2rem .375rem .375rem;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right .75rem center;
+  background-size: 16px 12px;
+}
+
+select:focus,
+input:focus {
+  color: var(--form-focus-color);
+  border: var(--form-focus-border);
+  box-shadow: var(--form-focus-box-shadow);
+  outline: 0;
+}
+
 
 /* copied from https://www.nytimes.com/games-assets/v2/wordle.ad4d1f42a5aee771f8d6557988a5fb7e99877fdc.css */
 body {
