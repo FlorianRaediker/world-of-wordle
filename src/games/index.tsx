@@ -95,7 +95,7 @@ export abstract class Game {
 
 export abstract class DailyGame extends Game {
   protected abstract readonly solutionsById: string[]
-  protected readonly startId: number = 1
+  protected readonly startId: number = 0
   protected readonly endId: number = null /* last id, if game was discontinued */
   protected abstract readonly startDate: Date /* date with startId */
 
@@ -147,7 +147,7 @@ class Wordle extends DailyGame {
   shareTextRegex = /Wordle\s+(?<id>\d+)\s+(?<tries>\d+|X)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?<guesses>(?:[⬛🟨🟩]{2,}\n)*[⬛🟨🟩]{2,})/iu
 
   solutionsById = WORDLE_SOLUTIONS
-  startDate = new Date("2021-06-20")
+  startDate = new Date("2021-06-19")
 }
 
 class WordleDeutsch extends Game {
@@ -172,70 +172,6 @@ class WordleAt extends DailyGame {
   solutionsById = WORDLE_AT_SOLUTIONS
   startId = 228
   startDate = new Date("2022-02-02")
-
-  /*getSolutionById(id: number): string {
-    const app = { getDayId: () => id };
-    const fp = num => ({
-      454: "hardModeInterruption",
-      421: "getDayId",
-      327: "length",
-      511: "split"
-    }[num]);
-    const solutions = WORDLE_AT_SOLUTIONS;
-
-    /* copied from https://wordle.at/main.js?v=3.9.4 * /
-    app['getTodaysGameData'] = function () {
-      const faL = {
-        a: 454
-      },
-        O = fp;
-      this[O(faL.a)] = ![];
-      let a = 0,
-        b = this[O(421)](),
-        // @ts-ignore
-        solutionString = solutions[(b + a) % solutions[O(327)]],
-        // @ts-ignore
-        solution = solutionString[O(511)]('');
-      return {
-        'dayId': b,
-        'solution': solution
-      };
-    }
-
-    return app["getTodaysGameData"]()["solution"].join("");
-  }
-
-  getIdOnDate(date: Date): number {
-    date = new Date(date);
-    const app = {};
-    const fp = num => ({
-      421: "getDayId",
-      416: "2022-02-02",
-      260: "setHours",
-      550: "round"
-    }[num]);
-
-    /* copied from https://wordle.at/main.js?v=3.9.4 * /
-    app[fp(421)] = function () {
-      const faw = {
-        a: 550
-      },
-        z = fp;
-      let a = 228,
-        b = new Date(z(416)),
-        c = date;//new Date();
-      c[z(260)](0);
-      // @ts-ignore
-      let d = Math[z(faw.a)]((c - b) / (24 * 60 * 60 * 1000));
-      return d + a;
-    }
-
-    return app["getDayId"]();
-  }
-
-  getDateById(id: number): Date {
-    return new Date(Date.UTC(2022, 1, 2) + (id - 228) * 86400000);  // 86400000ms = 1day
-  }*/
 }
 
 
@@ -249,34 +185,8 @@ class Taylordle extends DailyGame {
   shareTextRegex = /Taylordle\s+(?<id>\d+)\s+(?<tries>\d+)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?<guesses>(?:[⬜🟨🟩]{2,}\n)*[⬜🟨🟩]{2,})/iu
 
   solutionsById = TAYLORDLE_SOLUTIONS
-  startId = 0
   endId = 150
   startDate = new Date("2022-01-28")
-
-  /*getSolutionById(id: number) {
-    const ee = TAYLORDLE_SOLUTIONS;
-    const i = id;
-
-    // copied from https://web.archive.org/web/20220606165324js_/https://www.taylordle.com/static/js/main.c89356ea.js
-    return ee[i % ee.length];
-  }
-
-  getIdOnDate(date: Date) {
-    // copied from https://web.archive.org/web/20220606165324js_/https://www.taylordle.com/static/js/main.c89356ea.js
-    var e = function (e, a) {
-      var i = 60 * (e.getTimezoneOffset() - a.getTimezoneOffset()) * 1000,
-        s = 86400000,
-        r = Math.floor((a.getTime() - e.getTime() + i) / s);
-      return [r,
-        (r + 1) * s + e.getTime() - i]
-    }(new Date('January 28, 2022 00:00:00'), date)
-
-    return e[0];
-  }
-
-  getDateById(id: number) {
-    return new Date(Date.UTC(2022, 0, 28) + id * 86400000);  // 86400000ms = 1day
-  }*/
 }
 
 export const WORDLE = new Wordle();
