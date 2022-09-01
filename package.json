@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "test-wordlists": "npm test -- src/games/wordlists/wordlists.test.tsx --watchAll=false",
     "eject": "react-scripts eject",
-    "predeploy": "npm run build",
+    "predeploy": "npm run build && cp build/index.html build/404.html",
     "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
