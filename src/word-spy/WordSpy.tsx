@@ -24,27 +24,38 @@ export default function WordSpy(props: {}) {
     id = idOrDate;
     date = game.getDateById(idOrDate);
   }
-  const word = game.getSolutionById(id);
+
+  let result;
+  if (date > yesterday) {
+    result = "This time machine only travels back in time! Everything else would be cheating, right?";
+  } else {
+    const word = game.getSolutionById(id);
+    if (word) {
+      result = <WordleRow letters={word} states={Array(word.length).fill(word ? TileState.correct : TileState.empty)} />;
+    } else {
+      result = "No " + game.info.name + (idOrDate instanceof Date ? " on this date!" : " with this id!");
+    }
+  }
 
   return <div className="word-spy">
     <h2>Word Spy</h2>
     <div className="inputs">
       <div>
         <select onChange={e => { setIdOrDate(date); setGameId(e.target.value); }}>
-          {GAMES.filter(game => game instanceof DailyGame).map(game => <option value={game.id} key={game.id}>{game.name}</option>)}
+          {GAMES.filter(game => game instanceof DailyGame).map(game => <option value={game.id} key={game.id}>{game.info.name}</option>)}
         </select>
       </div>
       <div>
         <span className="label">on</span>{" "}
-        <input type="date" className="date-input" value={date ? date.toISOString().substring(0, 10) : null} onChange={e => setIdOrDate(e.target.valueAsDate)} />
+        <input type="date" className="date-input" value={date ? date.toISOString().substring(0, 10) : ""} onChange={e => setIdOrDate(e.target.valueAsDate)} />
       </div>
       <div>
         <span className="label">with ID</span>{" "}
-        <input type="number" className="id-input" value={id ? id : ""} onChange={e => setIdOrDate(e.target.valueAsNumber ? e.target.valueAsNumber : null)} />
+        <input type="number" className="id-input" value={id != null ? id : ""} onChange={e => setIdOrDate(e.target.valueAsNumber)} />
       </div>
     </div>
     <div className="result">
-      {word ? <WordleRow letters={word} states={Array(word.length).fill(word ? TileState.correct : TileState.empty)} /> : null}
+      {result}
     </div>
   </div>;
 }
