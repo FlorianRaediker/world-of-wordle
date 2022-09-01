@@ -1,0 +1,54 @@
+.games-overview .game {
+  display: block;
+  padding: 1.3em 0.5em;
+  padding-right: 30px;
+}
+
+.games-overview .game:not(:last-child) {
+  border-bottom: solid 1px #ccc;
+}
+
+.games-overview .game-name {
+  display: block;
+  font-size: 2em;
+  font-weight: bold;
+}
+
+.games-overview .game-icon {
+  height: 0.7em;
+  width: 0.7em;
+}
+
+.games-overview .tags {
+  margin-top: 0.3em;
+  line-height: 1.25;
+  font-size: 1.6em;
+}
+
+.games-overview .tag {
+  display: inline-block;
+  border-radius: 50rem;
+  padding: 0.35em 0.65em;
+  background-color: var(--color-correct);
+  line-height: 1;
+  font-size: 0.625em;
+  white-space: nowrap;
+  text-align: center;
+}
+
+.games-overview .tag[data-tag-id="lax-hard-mode"] {
+  background-color: var(--orange);
+}
+
+.games-overview .tag[data-tag-id="strict-hard-mode"] {
+  background-color: var(--red);
+}
+
+.games-overview .tag[data-tag-id="dark-theme"] {
+  color: white;
+  background-color: var(--color-gray-dark);
+}
+
+.games-overview .tag[data-tag-id="colorblind-theme"] {
+  background-color: var(--color-present);
+}

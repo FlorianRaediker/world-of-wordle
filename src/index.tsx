@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import WordleReconstructor from "./reconstructor/Reconstructor";
 import WordSpy from "./word-spy/WordSpy";
+import GamesOverview from "./games-overview/games-overview";
 
 
 const root = ReactDOM.createRoot(document.getElementById("root") as HTMLElement);
@@ -15,6 +16,7 @@ root.render(
       <Routes>
         <Route path="/" element={<App />}>
           <Route index element={<AppNavigation />} />
+          <Route path="games" element={<GamesOverview />} />
           <Route path="word-spy" element={<WordSpy />} />
           <Route path="reconstructor" element={
             <>

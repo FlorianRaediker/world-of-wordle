@@ -20,6 +20,9 @@ export enum HardMode {
 interface GameInfo {
   readonly name: string
   readonly url: string
+  readonly hasDarkTheme?: boolean
+  readonly hasColorblindTheme?: boolean
+  readonly icon?: string
 }
 
 export type ShareInfo = (
@@ -97,7 +100,11 @@ export abstract class DailyGame extends Game {
   protected abstract readonly solutionsById: string[]
   protected readonly startId: number = 0
   protected readonly endId: number = null /* last id, if game was discontinued */
-  protected abstract readonly startDate: Date /* date with startId */
+  abstract readonly startDate: Date /* date with startId */
+
+  getEndDate() {
+    return this.getDateById(this.endId);
+  }
 
   getSolutionById(id: number): string {
     if (id == null || id < this.startId || (this.endId != null && id > this.endId)) {
@@ -139,7 +146,13 @@ export abstract class DailyGame extends Game {
 
 class Wordle extends DailyGame {
   id = "wordle"
-  info = { name: "Wordle", url: "https://www.nytimes.com/games/wordle/index.html" }
+  info = { 
+    name: "Wordle", 
+    url: "https://www.nytimes.com/games/wordle/index.html",
+    hasDarkTheme: true, 
+    hasColorblindTheme: true,
+    icon: "https://www.nytimes.com/games-assets/v2/metadata/wordle-favicon.ico?v=v2209011540"
+  }
   solutions = [...WORDLE_SOLUTIONS].sort()
   words = { 5: WORDLE_WORDS }
   totalTries = 6
@@ -152,7 +165,13 @@ class Wordle extends DailyGame {
 
 class WordleDeutsch extends Game {
   id = "wordledeutsch"
-  info = { name: "Wordle Deutsch", url: "https://wordledeutsch.org" }
+  info = {
+    name: "Wordle Deutsch",
+    url: "https://wordledeutsch.org",
+    hasDarkTheme: true,
+    hasColorblindTheme: true,
+    icon: "https://wordledeutsch.org/images/wordle_logo_32x32.png"
+  }
   solutions = [...WORDLEDEUTSCH_SOLUTIONS].sort()
   words = { 5: WORDLEDEUTSCH_WORDS }
   totalTries = 6
@@ -162,7 +181,12 @@ class WordleDeutsch extends Game {
 
 class WordleAt extends DailyGame {
   id = "wordle_at"
-  info = { name: "wordle.at", url: "https://wordle.at" }
+  info = {
+    name: "wordle.at",
+    url: "https://wordle.at",
+    hasDarkTheme: true,
+    hasColorblindTheme: true
+  }
   solutions = [...WORDLE_AT_SOLUTIONS].sort()
   words = { 5: WORDLE_AT_WORDS }
   totalTries = 6
@@ -177,7 +201,13 @@ class WordleAt extends DailyGame {
 
 class Taylordle extends DailyGame {
   id = "taylordle"
-  info = { name: "Taylordle", url: "https://taylordle.com" }
+  info = {
+    name: "Taylordle",
+    url: "https://taylordle.com",
+    hasDarkTheme: true,
+    hasColorblindTheme: true,
+    icon: "https://www.taylordle.com/favicon.ico"
+  }
   solutions = [...TAYLORDLE_SOLUTIONS].sort()
   words = TAYLORDLE_WORDS
   totalTries = 6
