@@ -1,9 +1,21 @@
-#share-input {
+.reconstructor {
+  margin: auto;
+}
+
+@media (min-width: 400px) {
+  .reconstructor {
+    max-width: 400px;
+  }
+}
+
+.reconstructor #share-input {
   display: block;
   font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
   resize: none;
-  height: 10.5em;
+  height: 12em;
   width: 12em;
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
 
 .reconstructor .share-info {
@@ -14,52 +26,45 @@
   text-transform: uppercase;
 }
 
-.reconstructor .row-reconstructor {
-  margin-top: 3em;
-  margin-bottom: 2.5em;
-}
-
-.reconstructor .row-reconstructor .wordle-row {
-  cursor: pointer;
-}
-
-.reconstructor .wordlists {
+.reconstructor .submit {
   margin-top: 1em;
-  max-height: 300px;
-  overflow-y: scroll;
-  background-color: var(--color-tone-5);
+}
+
+.reconstructor .wordle-row[data-selected=false] {
+  opacity: 0.35;
+}
+
+.reconstructor .reconstructs {
+  margin-top: 1em;
   transition: height 0.3s;
 }
 
-.reconstructor .wordlists[data-collapsed="true"] {
-  margin-top: 0;
-  height: 0;
-}
-
-.reconstructor .selectable-words {
+.reconstructor .reconstruct-list {
   margin-top: 1.2em;
   margin-bottom: 1.2em;
 }
 
-.reconstructor .selectable-word {
+.reconstructor .reconstruct {
   display: inline-block;
   cursor: pointer;
   text-transform: uppercase;
-  border: 2px solid var(--color-tone-3);
-  padding: 0.3em;
-  margin: 0.2em;
+  /*border: 1px solid var(--color-tone-3);*/
+  border-radius: 0.4em;
+  background-color: var(--color-gray-light);
+  padding: 0.5em;
+  margin: 0.4em;
   font-family: monospace;
 }
 
-.reconstructor .selectable-word[data-enabled="false"] {
-  color: var(--color-tone-2);
+.reconstructor .reconstruct[data-enabled="false"] {
+  color: var(--color-gray-mid);
 }
 
-.reconstructor .selectable-word[data-selected="true"] {
-  border: 2px solid var(--color-absent);
-  background: var(--color-absent);
+.reconstructor .reconstruct[data-selected="true"] {
+  color: white;
+  background: var(--color-correct);
 }
 
-.reconstructor .selectable-word[data-word=""]::before {
+.reconstructor .reconstruct[data-word=""]::before {
   content: "❌";
 }

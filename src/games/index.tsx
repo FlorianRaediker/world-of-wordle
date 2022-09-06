@@ -25,22 +25,17 @@ interface GameInfo {
   readonly icon?: string
 }
 
-export type ShareInfo = (
-  {
-    tries: number
-    isHardMode: boolean
-    evaluations: CharEvaluation[][]
-    // the following only exist if the game has ids (DailyGame)
-    wordId?: number
-    solution?: string
-    date?: Date
+export type ShareInfo = {
+  game: Game
+  isHardMode: boolean
+  evaluations: CharEvaluation[][]
+  // the following only exist if the game has ids (DailyGame)
+  solutionId?: number
+  solution?: string
+  date?: Date
 
-    warning?: string
-  } |
-  {
-    error: string
-  }
-);
+  warning?: string
+};
 
 
 export abstract class Game {
@@ -65,7 +60,7 @@ export abstract class Game {
     }[emoji] || null;
   }
 
-  protected _parseShareText(shareText: string): [RegExpExecArray, ShareInfo] {
+  protected _parseShareText(shareText: string): [RegExpExecArray, ShareInfo | { error: string }] {
     const match = this.shareTextRegex.exec(shareText);
     if (match) {
       let warning: string;
@@ -86,12 +81,12 @@ export abstract class Game {
       } else if (!(wordLength in this.words)) {
         return [match, { error: `${this.info.name} doesn't have words with length ${wordLength}` }];
       }
-      return [match, { tries, isHardMode, evaluations, warning }];
+      return [match, { game: this, isHardMode, evaluations, warning }];
     }
     return [null, null];
   }
 
-  parseShareText(shareText: string): ShareInfo {
+  parseShareText(shareText: string): ShareInfo | { error: string } {
     return this._parseShareText(shareText)[1];
   }
 }
@@ -132,12 +127,12 @@ export abstract class DailyGame extends Game {
     return this.getSolutionById(this.getIdOnDate(date));
   }
 
-  parseShareText(shareText: string): ShareInfo {
+  parseShareText(shareText: string): ShareInfo | { error: string } {
     const [match, info] = this._parseShareText(shareText);
     if (info && !("error" in info)) {
-      info.wordId = parseInt(match.groups.id);
-      info.solution = this.getSolutionById(info.wordId);
-      info.date = this.getDateById(info.wordId);
+      info.solutionId = parseInt(match.groups.id);
+      info.solution = this.getSolutionById(info.solutionId);
+      info.date = this.getDateById(info.solutionId);
     }
     return info;
   }
@@ -146,10 +141,10 @@ export abstract class DailyGame extends Game {
 
 class Wordle extends DailyGame {
   id = "wordle"
-  info = { 
-    name: "Wordle", 
+  info = {
+    name: "Wordle",
     url: "https://www.nytimes.com/games/wordle/index.html",
-    hasDarkTheme: true, 
+    hasDarkTheme: true,
     hasColorblindTheme: true,
     icon: "https://www.nytimes.com/games-assets/v2/metadata/wordle-favicon.ico?v=v2209011540"
   }

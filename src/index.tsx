@@ -4,7 +4,7 @@ import "./index.css";
 import { App, AppNavigation } from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import WordleReconstructor from "./reconstructor/Reconstructor";
+import Reconstructor from "./reconstructor/Reconstructor";
 import WordSpy from "./word-spy/WordSpy";
 import GamesOverview from "./games-overview/games-overview";
 
@@ -18,12 +18,7 @@ root.render(
           <Route index element={<AppNavigation />} />
           <Route path="games" element={<GamesOverview />} />
           <Route path="word-spy" element={<WordSpy />} />
-          <Route path="reconstructor" element={
-            <>
-              <h2>Wordle Reconstructor</h2>
-              <WordleReconstructor />
-            </>
-          } />
+          <Route path="reconstructor" element={<Reconstructor />} />
         </Route>
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>

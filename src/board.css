@@ -1,7 +1,10 @@
+.wordle-board.selectable .wordle-row {
+  cursor: pointer;
+}
+
 .wordle-row {
   display: flex;
   width: 100%;
-  /*gap: 10px;*/
   user-select: none;
   --wordle-row-max-width: 550px;
 }
@@ -22,8 +25,7 @@
 }
 
 .wordle-tile .letter {
-  margin-left: 5%;
-  margin-right: 5%;
+  margin: 5%;
 }
 
 .wordle-tile[data-state="empty"] .letter {

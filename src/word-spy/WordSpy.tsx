@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DailyGame, Game, GAMES, WORDLE } from "../games";
-import WordleRow, { TileState } from "../board";
+import { TileState, WordleRow } from "../board";
 import "./WordSpy.css";
 
 
@@ -31,7 +31,7 @@ export default function WordSpy(props: {}) {
   } else {
     const word = game.getSolutionById(id);
     if (word) {
-      result = <WordleRow letters={word} states={Array(word.length).fill(word ? TileState.correct : TileState.empty)} />;
+      result = <WordleRow letters={word} evaluation={Array(word.length).fill(word ? TileState.correct : TileState.empty)} />;
     } else {
       result = "No " + game.info.name + (idOrDate instanceof Date ? " on this date!" : " with this id!");
     }
