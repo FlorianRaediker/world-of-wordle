@@ -6,21 +6,8 @@
 
 .header {
   display: block;
-  margin: 3vh 0 3vh 0;
+  margin: 4vh 0 3vh 0;
   text-align: center;
-}
-
-a.active .header {
-  margin-top: 5vh;
-  margin-bottom: 4vh;
-}
-
-a.active .header .bi {
-  display: none;
-}
-
-.back-button.active {
-  display: none;
 }
 
 .main {

@@ -71,7 +71,7 @@ a.anchor-header:hover::before {
   background-color: var(--color-gray-mid);
 }
 
-.bi {
+.bi, .header svg {
   width: 1em;
   height: 1em;
   vertical-align: -.125em;
