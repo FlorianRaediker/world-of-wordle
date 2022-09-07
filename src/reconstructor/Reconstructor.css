@@ -18,6 +18,12 @@
   margin-bottom: 1em;
 }
 
+.reconstructor .warning {
+  display: block;
+  margin-bottom: 1em;
+  color: var(--red);
+}
+
 .reconstructor .share-info {
   display: block;
 }
