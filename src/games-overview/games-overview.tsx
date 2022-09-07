@@ -6,6 +6,9 @@ export default function GamesOverview() {
   return <div className="games-overview">
     {GAMES.map(game => {
       let tags = [];
+      if (game instanceof DailyGame) {
+        tags.push({ name: "Daily", id: "daily" });
+      }
       if (game.hardMode === HardMode.Lax) {
         tags.push({ name: "Lax Hard Mode", id: "lax-hard-mode" });
       } else if (game.hardMode === HardMode.Strict) {
