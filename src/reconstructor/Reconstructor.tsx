@@ -136,6 +136,13 @@ function getReconstructedWords(game: Game, evaluations: CharEvaluation[][], solu
 
 
 function disableImpossibleReconstructsInHardMode(evaluations: CharEvaluation[][], reconstructs: Reconstructed[][][], selectedReconstructs: string[], isStrictHardMode: boolean) {
+  for (const r of reconstructs) {
+    for (const wordlist of r) {
+      for (const reconstruct of wordlist) {
+        reconstruct.enabled = true;
+      }
+    }
+  }
   for (let r = 0; r < evaluations.length; r++) {
     const evaluation = evaluations[r];
     const selectedReconstruct = selectedReconstructs[r];
