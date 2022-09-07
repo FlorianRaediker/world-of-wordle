@@ -58,7 +58,7 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
       </div> : null}
 
     {isValid ?
-      <button className="submit primary" onClick={() => 
+      <button className="submit primary" onClick={() =>
         props.onInputFinished({
           game: parsed.game,
           evaluations: parsed.info.evaluations,
@@ -92,17 +92,16 @@ function getReconstructedWords(game: Game, evaluations: CharEvaluation[][], solu
       }
     }
     for (let i = 0; i < evaluation.length; i++) {
-      switch (evaluation[i]) {
-        case CharEvaluation.Absent:
-          if (solution.includes(word[i]))
-            return false;
-          break;
-        case CharEvaluation.Present:
-          const index = solutionA.indexOf(word[i]);
-          if (word[i] === solution[i] || index === -1)
-            return false;
-          solutionA[index] = null;
-          break;
+      if (evaluation[i] === CharEvaluation.Absent) {
+        if (solutionA.includes(word[i])) {
+          return false;
+        }
+      } else if (evaluation[i] === CharEvaluation.Present) {
+        const index = solutionA.indexOf(word[i]);
+        if (word[i] === solution[i] || index === -1) {
+          return false;
+        }
+        solutionA[index] = null;
       }
     }
     return true;
@@ -247,7 +246,7 @@ export default function Reconstructor() {
         Reconstruct another
       </button>
 
-      <p>Select a row and choose a fitting guess below.</p>
+      <p>Select a row and choose one of the guesses below.</p>
 
       {shareInfo.isHardMode ? <p>Hard Mode was enabled, so once you select a guess, guesses from other rows that are no longer possible will be grayed out.</p> : null}
 
