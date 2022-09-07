@@ -136,6 +136,19 @@ export abstract class DailyGame extends Game {
     }
     return info;
   }
+
+  getPastSolutionsByMonth(lastDate: Date) {
+    const months: { firstDate: Date, firstId: number, words: string[] }[] = [];
+    const endId = Math.min(this.endId || Infinity, this.getIdOnDate(lastDate) || Infinity);
+    for (let id = this.startId; id <= endId; id++) {
+      const date = this.getDateById(id);
+      if (months.length === 0 || months[months.length-1].firstDate.getMonth() !== date.getMonth()) {
+        months.push({ firstDate: new Date(date), firstId: id, words: [] });
+      }
+      months[months.length-1].words.push(this.getSolutionById(id));
+    }
+    return months;
+  }
 }
 
 

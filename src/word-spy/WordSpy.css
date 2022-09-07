@@ -31,3 +31,39 @@
   margin: 2em auto 0 auto;
   max-width: 400px;
 }
+
+.word-spy .show-all-toggle-container {
+  margin-top: 2.5em;
+  text-align: center;
+}
+
+.word-spy .show-all-toggle {
+  border: 2px solid var(--color-gray-dark);
+  padding: .5em 1em;
+  user-select: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.word-spy .all-solutions {
+  max-width: 350px;
+  margin: 0 auto;
+  margin-top: 2em;
+}
+
+.word-spy .all-solutions h3 {
+  margin-top: 1em;
+  margin-bottom: 0;
+}
+
+.word-spy .all-solutions ul {
+  margin-top: 0.5em;
+  line-height: 2;
+}
+
+.word-spy .text-solution {
+  text-transform: uppercase;
+}

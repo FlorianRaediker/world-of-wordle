@@ -26,7 +26,7 @@ export default function GamesOverview() {
         <a className="link external" href={game.info.url} target="_blank" rel="noopener noreferrer">{game.info.url.replace(/^https?:\/\//, "")}</a>
         <p>{game instanceof DailyGame ? <span className="since">Since {game.startDate.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span> : null}</p>
         <p>{game instanceof DailyGame && game.getEndDate() ? <span className="since">Discontinued {game.getEndDate().toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</span> : null}</p>
-        <div className="tags">{tags.map(tag => <><span className="tag" data-tag-id={tag.id}>{tag.name}</span>{" "}</>)}</div>
+        <div className="tags">{tags.map(tag => <span key={tag.id}><span className="tag" data-tag-id={tag.id}>{tag.name}</span>{" "}</span>)}</div>
       </div>;
     })}
   </div>
