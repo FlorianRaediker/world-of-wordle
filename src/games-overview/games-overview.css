@@ -1,3 +1,8 @@
+.games-overview a.link {
+  --link-color: var(--color-correct);
+  text-decoration: none;
+}
+
 .games-overview .game {
   display: block;
   padding: 2em 0.5em;

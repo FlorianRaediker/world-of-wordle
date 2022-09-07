@@ -1,4 +1,5 @@
 import { ReactFragment, useState } from "react";
+import { Link } from "react-router-dom";
 import { WordleBoard } from "../board";
 import { Game, GAMES, HardMode, ShareInfo, CharEvaluation } from "../games";
 import "./Reconstructor.css";
@@ -67,7 +68,8 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
           solutionId: parsed.info.solutionId,
           date: parsed.info.date
         })
-      }>Reconstruct</button> : null}
+      }>Reconstruct</button> : 
+      <Link className="link" to="/games">View list of all supported Wordle games</Link>}
   </div>;
 }
 

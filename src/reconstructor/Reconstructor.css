@@ -18,7 +18,7 @@
   margin-bottom: 1em;
 }
 
-.reconstructor .warning {
+.reconstructor .warning, .reconstructor .error {
   display: block;
   margin-bottom: 1em;
   color: var(--red);

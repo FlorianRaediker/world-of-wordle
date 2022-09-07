@@ -9,7 +9,7 @@
   --tagline-color: #555;
   --footer-color: #464646;
   --footer-bg: #dfdfdf;
-  --link-color: var(--color-correct);
+  --link-color: #326891;
 
   --form-color: #212529;
   --form-border: 1px solid #9c9c9c;
@@ -45,6 +45,7 @@ a {
 
 a.link {
   color: var(--link-color);
+  text-decoration: underline;
 }
 
 a.external::after {
