@@ -24,12 +24,21 @@
   color: var(--red);
 }
 
+.reconstructor .games-overview-link {
+  display: block;
+  margin-top: 1em;
+}
+
 .reconstructor .share-info {
   display: block;
 }
 
 .reconstructor .solution {
   text-transform: uppercase;
+}
+
+.reconstructor input.solution {
+  max-width: 10em;
 }
 
 .reconstructor .submit {

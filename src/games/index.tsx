@@ -110,18 +110,23 @@ export abstract class Game {
     return this.generateReconstructedShareText(id, evaluations, Array(evaluations.length).fill(null), hardMode);
   }
 
-  generateReconstructedShareText(id: number, evaluations: CharEvaluation[][], guesses: string[], hardMode: boolean = false) {
+  generateReconstructedShareText(properties: {}, evaluations: CharEvaluation[][], guesses: string[], hardMode: boolean = false) {
     let guessesTexts = [];
-    for (let i = 0; i<evaluations.length; i++) {
+    for (let i = 0; i < evaluations.length; i++) {
       if (evaluations[i]) {
         guessesTexts.push(evaluations[i].map(e => this.evaluationToEmoji(e)).join(""));
       }
       if (guesses[i]) {
-        guessesTexts[guessesTexts.length-1] += " " + guesses[i].toUpperCase();
+        guessesTexts[guessesTexts.length - 1] += " " + guesses[i].toUpperCase();
       }
     }
-    return this.getShareTextTemplate()
-      .replace("$id", id.toString())
+    let shareText = this.getShareTextTemplate();
+    for (let [key, value] of Object.entries(properties)) {
+      if (value) {
+        shareText = shareText.replace("$" + key, value.toString());
+      }
+    }
+    return shareText
       .replace("$tries", evaluations.length.toString())
       .replace("$hardMode", hardMode ? "*" : "")
       .replace("$guesses", guessesTexts.join("\n"));
@@ -179,10 +184,10 @@ export abstract class DailyGame extends Game {
     const endId = Math.min(this.endId || Infinity, this.getIdOnDate(lastDate) || Infinity);
     for (let id = this.startId; id <= endId; id++) {
       const date = this.getDateById(id);
-      if (months.length === 0 || months[months.length-1].firstDate.getMonth() !== date.getMonth()) {
+      if (months.length === 0 || months[months.length - 1].firstDate.getMonth() !== date.getMonth()) {
         months.push({ firstDate: new Date(date), firstId: id, words: [] });
       }
-      months[months.length-1].words.push(this.getSolutionById(id));
+      months[months.length - 1].words.push(this.getSolutionById(id));
     }
     return months;
   }

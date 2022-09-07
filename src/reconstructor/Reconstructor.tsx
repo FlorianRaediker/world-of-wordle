@@ -32,7 +32,11 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
     }
   }
 
-  let isValid = parsed.info && (parsed.info.solution || enteredSolution.length === parsed.info.evaluations[0].length);
+  let isValid = parsed.info &&
+    (parsed.info.solution ||
+      (enteredSolution &&
+        enteredSolution.length === parsed.info.evaluations[0].length &&
+        parsed.game.solutions.includes(enteredSolution)));
 
   return <div className="reconstructor-input">
     <label htmlFor="share-input">Insert shareable Wordle result:</label>
@@ -48,14 +52,14 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
     {parsed.info ?
       <div>
         {parsed.info.solutionId ? <span className="share-info">{parsed.game.info.name} #{parsed.info.solutionId}</span> : null}
-        {!parsed.info.solution ?
-          <span className="share-info">
-            Solution: <input type="text" className="solution" onChange={e => setEnteredSolution(e.target.value.toLowerCase())} />
-          </span> : null}
-
         {parsed.info.date ? <span className="share-info">played on {renderDate(parsed.info.date)}</span> : null}
         {parsed.game.hardMode !== HardMode.None && parsed.info.isHardMode ? <span className="share-info">with Hard Mode enabled</span> : null}
-        {parsed.info.solution ? <span className="share-info">Solution: <span className="solution">{parsed.info.solution}</span></span> : null}
+        {parsed.info.solution ?
+          <span className="share-info">Solution: <span className="solution">{parsed.info.solution}</span></span> :
+          <span className="share-info">
+            Solution: <input type="text" className="solution" onChange={e => setEnteredSolution(e.target.value.toLowerCase())} />
+          </span>
+        }
       </div> : null}
 
     {isValid ?
@@ -68,8 +72,9 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
           solutionId: parsed.info.solutionId,
           date: parsed.info.date
         })
-      }>Reconstruct</button> : 
-      <Link className="link" to="/games">View list of all supported Wordle games</Link>}
+      }>Reconstruct</button> : null}
+
+    <Link className="link games-overview-link" to="/games">View list of all supported Wordle games</Link>
   </div>;
 }
 
@@ -145,7 +150,7 @@ function disableImpossibleReconstructsInHardMode(evaluations: CharEvaluation[][]
   }
   for (let r = 0; r < evaluations.length; r++) {
     const evaluation = evaluations[r];
-    const selectedReconstruct = selectedReconstructs[r];
+    const selectedReconstruct = selectedReconstructs[r]; 
     if (selectedReconstruct) {
       for (let c = 0; c < evaluation.length; c++) {
         if (evaluation[c] === CharEvaluation.Present) {
@@ -304,7 +309,7 @@ export default function Reconstructor() {
       </div>
 
       <div className="copy-board-container">
-        <CopyButton text={shareInfo.game.generateReconstructedShareText(shareInfo.solutionId, shareInfo.evaluations, selectedReconstructs, shareInfo.isHardMode)} />
+        <CopyButton text={shareInfo.game.generateReconstructedShareText({ id: shareInfo.solutionId }, shareInfo.evaluations, selectedReconstructs, shareInfo.isHardMode)} />
       </div>
 
       <div className="reconstructs">
