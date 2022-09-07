@@ -258,7 +258,7 @@ export default function Reconstructor() {
 
       <p>Select a row and choose one of the guesses below.</p>
 
-      {shareInfo.isHardMode ? <p>Hard Mode was enabled, so once you select a guess, guesses from other rows that are no longer possible will be grayed out.</p> : null}
+      {shareInfo.isHardMode ? <p>This was played in Hard Mode, so once you select a guess, guesses from other rows that are no longer possible will be grayed out.</p> : null}
 
       <p>{shareInfo.game.info.name} {shareInfo.solutionId ? `#${shareInfo.solutionId}` : null} {shareInfo.date ? `on ${renderDate(shareInfo.date)}` : null}</p>
 
