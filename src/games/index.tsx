@@ -199,7 +199,7 @@ class WordleAt extends DailyGame {
   words = { 5: WORDLE_AT_WORDS }
   totalTries = 6
   hardMode = HardMode.Strict
-  shareTextRegex = /Wördl\s+(?<id>\d+)\s+(?<tries>\d+|X)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?:🔥\d+\s+)?\s+(?<guesses>(?:[⬛⬜🟨🟩]{2,}\n)*[⬛⬜🟨🟩]{2,})/ui
+  shareTextRegex = /(Wördl|Wordle)\s+(?<id>\d+)\s+(?<tries>\d+|X)\/(?<totalTries>\d+)(?<hardMode>\*?)\s+(?:🔥\d+\s+)?\s+(?<guesses>(?:[⬛⬜🟨🟩]{2,}\n)*[⬛⬜🟨🟩]{2,})/ui
 
   solutionsById = WORDLE_AT_SOLUTIONS
   startId = 228
