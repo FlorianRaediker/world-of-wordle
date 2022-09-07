@@ -81,7 +81,6 @@ select,
 input,
 textarea,
 button {
-  display: inline-block;
   font: inherit;
   appearance: none;
 }
