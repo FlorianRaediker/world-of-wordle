@@ -60,6 +60,14 @@ export abstract class Game {
     }[emoji] || null;
   }
 
+  protected evaluationToEmoji(evaluation: CharEvaluation) {
+    return {
+      [CharEvaluation.Absent]: "⬛",
+      [CharEvaluation.Present]: "🟨",
+      [CharEvaluation.Correct]: "🟩"
+    }[evaluation] || null;
+  }
+
   protected _parseShareText(shareText: string): [RegExpExecArray, ShareInfo | { error: string }] {
     const match = this.shareTextRegex.exec(shareText);
     if (match) {
@@ -73,10 +81,14 @@ export abstract class Game {
         warning = `Share indicates ${totalTries} total guesses, but ${this.info.name} gives ${this.totalTries}`;
       }
       const evaluations = match.groups.guesses.split("\n").map(row => Array.from(row).map(e => this.emojiToEvaluation(e)));
+      if (!evaluations.every(es => es.every(e => e != null))) {
+        return [null, null];
+      }
       const wordLength = evaluations[0].length;
       if (tries !== -1 && evaluations.length !== tries) {
         warning = `Count of guesses (${tries}/${totalTries}) doesn't match actual guesses`;
-      } else if (!evaluations.every(e => e.length === wordLength)) {
+      }
+      if (!evaluations.every(e => e.length === wordLength)) {
         return [match, { error: "Guesses should all have the same length" }];
       } else if (!(wordLength in this.words)) {
         return [match, { error: `${this.info.name} doesn't have words with length ${wordLength}` }];
@@ -88,6 +100,31 @@ export abstract class Game {
 
   parseShareText(shareText: string): ShareInfo | { error: string } {
     return this._parseShareText(shareText)[1];
+  }
+
+  protected getShareTextTemplate() {
+    return `${this.info.name} $id $tries/${this.totalTries}$hardMode\n\n$guesses`;
+  }
+
+  generateShareText(id: number, evaluations: CharEvaluation[][], hardMode: boolean = false) {
+    return this.generateReconstructedShareText(id, evaluations, Array(evaluations.length).fill(null), hardMode);
+  }
+
+  generateReconstructedShareText(id: number, evaluations: CharEvaluation[][], guesses: string[], hardMode: boolean = false) {
+    let guessesTexts = [];
+    for (let i = 0; i<evaluations.length; i++) {
+      if (evaluations[i]) {
+        guessesTexts.push(evaluations[i].map(e => this.evaluationToEmoji(e)).join(""));
+      }
+      if (guesses[i]) {
+        guessesTexts[guessesTexts.length-1] += " " + guesses[i].toUpperCase();
+      }
+    }
+    return this.getShareTextTemplate()
+      .replace("$id", id.toString())
+      .replace("$tries", evaluations.length.toString())
+      .replace("$hardMode", hardMode ? "*" : "")
+      .replace("$guesses", guessesTexts.join("\n"));
   }
 }
 

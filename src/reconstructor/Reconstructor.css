@@ -68,3 +68,32 @@
 .reconstructor .reconstruct[data-word=""]::before {
   content: "❌";
 }
+
+.reconstructor .copy-board-container {
+  margin-top: 1em;
+  text-align: center;
+}
+
+.reconstructor .copy-board {
+  background-color: var(--color-correct);
+  color: white;
+  padding: .5em 1em;
+  user-select: none;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-block;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.reconstructor .copy-board .bi-check-lg {
+  display: none;
+}
+
+.reconstructor .copy-board[data-copied=true] .bi-check-lg {
+  display: inline;
+}
+
+.reconstructor .copy-board[data-copied=true] .bi-clipboard {
+  display: none;
+}
