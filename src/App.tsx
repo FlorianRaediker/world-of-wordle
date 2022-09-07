@@ -7,7 +7,7 @@ export function App() {
     <header>
       <Link to="/">
         <h1 className="header">
-          <svg version="1.1" viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg"><rect width="64" height="64" ry="12" /><rect x="8" y="8" width="12" height="12" fill="#b59f3b" /><g fill="#fff"><rect x="25.981" y="8" width="12" height="12" /><rect x="43.963" y="8" width="12" height="12" /><rect x="8" y="25.981" width="12" height="12" /><rect x="25.981" y="25.981" width="12" height="12" /></g><g fill="#538d4e"><rect x="43.963" y="25.981" width="12" height="12" /><rect x="43.963" y="43.963" width="12" height="12" /><rect x="25.981" y="43.963" width="12" height="12" /><rect x="8" y="43.963" width="12" height="12" /></g></svg>
+        <svg version="1.1" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg"><rect width="32" height="32" ry="3"/><rect x="3" y="3" width="7" height="7" ry="1.75" fill="#b59f3b"/><g fill="#fff"><rect x="12.5" y="3" width="7" height="7" ry="1.75"/><rect x="22" y="3" width="7" height="7" ry="1.75"/><rect x="3" y="12.5" width="7" height="7" ry="1.75"/><rect x="12.5" y="12.5" width="7" height="7" ry="1.75"/></g><g fill="#538d4e"><rect x="22" y="12.5" width="7" height="7" ry="1.75"/><rect x="22" y="22" width="7" height="7" ry="1.75"/><rect x="12.5" y="22" width="7" height="7" ry="1.75"/><rect x="3" y="22" width="7" height="7" ry="1.75"/></g></svg>
           {" "}
           World of Wordle
         </h1>
