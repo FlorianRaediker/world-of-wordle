@@ -4,9 +4,13 @@
   flex-direction: column;
 }
 
+header {
+  margin: 4vh auto 3vh auto;
+}
+
 .header {
+  margin: 0;
   display: block;
-  margin: 4vh 0 3vh 0;
   text-align: center;
 }
 
@@ -28,6 +32,11 @@
 
 .footer p {
   margin-top: 0;
+}
+
+.github-link {
+  display: inline-block;
+  line-height: 1;
 }
 
 .footer .bi {

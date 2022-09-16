@@ -45,7 +45,7 @@
   margin-top: 1em;
 }
 
-.reconstructor .wordle-row[data-selected=false] {
+.reconstructor .wordle-row[data-selected=false] .wordle-tile {
   opacity: 0.35;
 }
 

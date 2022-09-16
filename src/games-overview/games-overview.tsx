@@ -22,7 +22,7 @@ export default function GamesOverview() {
       }
       return <div className="game" key={game.id}>
         <a className="anchor-header game-name" href={"#" + game.id} id={game.id}>
-          <img className="game-icon" src={game.info.icon || `https://external-content.duckduckgo.com/ip3/${new URL(game.info.url).hostname}.ico`} />
+          <img className="game-icon" src={game.info.icon || `https://external-content.duckduckgo.com/ip3/${new URL(game.info.url).hostname}.ico`} alt="" />
           {" "}
           {game.info.name}
         </a>

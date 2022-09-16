@@ -36,7 +36,7 @@ export function WordleRow(props: {
   for (let i = 0; i < props.letters.length; i++) {
     tiles.push(<WordleTile letter={props.letters[i]} evaluation={props.evaluation ? props.evaluation[i] : TileState.empty} key={i} />);
   }
-  return <div className="wordle-row" data-tile-count={props.letters.length} data-selected={!!props.isSelected} onClick={props.onClick}>
+  return <div className="wordle-row" data-tile-count={props.letters.length} data-selected={!!props.isSelected} tabIndex={props.onClick ? 0 : null} onClick={props.onClick}>
     {tiles}
   </div>;
 }
