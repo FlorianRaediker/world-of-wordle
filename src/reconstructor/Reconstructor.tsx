@@ -51,7 +51,7 @@ function ReconstructorInput(props: { onInputFinished: (shareInfo: ShareInfo) => 
 
     {parsed.info ?
       <div>
-        {parsed.info.solutionId ? <span className="share-info">{parsed.game.info.name} #{parsed.info.solutionId}</span> : null}
+        <span className="share-info">{parsed.game.info.name} {parsed.info.solutionId ? parsed.info.solutionId : null}</span>
         {parsed.info.date ? <span className="share-info">played on {renderDate(parsed.info.date)}</span> : null}
         {parsed.game.hardMode !== HardMode.None && parsed.info.isHardMode ? <span className="share-info">with Hard Mode enabled</span> : null}
         {parsed.info.solution ?
@@ -150,7 +150,8 @@ function disableImpossibleReconstructsInHardMode(evaluations: CharEvaluation[][]
   }
   for (let r = 0; r < evaluations.length; r++) {
     const evaluation = evaluations[r];
-    const selectedReconstruct = selectedReconstructs[r]; 
+    const selectedReconstruct = selectedReconstructs[r];
+
     if (selectedReconstruct) {
       for (let c = 0; c < evaluation.length; c++) {
         if (evaluation[c] === CharEvaluation.Present) {
@@ -183,7 +184,7 @@ function disableImpossibleReconstructsInHardMode(evaluations: CharEvaluation[][]
       }
 
       // all characters from previous words with evaluation "present" must also have evaluation "present" or "correct" in selectedReconstruct
-      // in HardMode.Strict, characters with evaluation "present" must have different indices
+      // in Strict Hard Mode, characters with evaluation "present" must have different indices
       const correctChars = [];
       const presentChars = [];
       for (let i = 0; i < selectedReconstruct.length; i++) {
@@ -219,6 +220,9 @@ function disableImpossibleReconstructsInHardMode(evaluations: CharEvaluation[][]
         }
       }
     }
+
+    // TODO: for every guess except the first, find all characters that the reconstructs contain, and 
+    // disable any previous reconstructs with "present" characters which are not covered by future guesses
   }
 }
 
@@ -252,6 +256,7 @@ export default function Reconstructor() {
   const [currentStep, setCurrentStep] = useState<number>(null); /* null: no share text given yet, 0...<=5: selected row */
   const [reconstruct, setReconstruct] = useState<{ shareInfo: ShareInfo, reconstructs: Reconstructed[][][] }>(null);
   const [selectedReconstructs, setSelectedReconstructs] = useState<string[]>(null);
+  const [useStrictHardMode, setUseStrictHardMode] = useState<boolean>(false);
 
   function renderReconstruct(word: string, enabled: boolean) {
     return (
@@ -284,7 +289,7 @@ export default function Reconstructor() {
     const { shareInfo, reconstructs } = reconstruct;
 
     if (shareInfo.isHardMode) {
-      disableImpossibleReconstructsInHardMode(shareInfo.evaluations, reconstructs, selectedReconstructs, shareInfo.game.hardMode === HardMode.Strict);
+      disableImpossibleReconstructsInHardMode(shareInfo.evaluations, reconstructs, selectedReconstructs, shareInfo.game.hardMode === HardMode.Strict || useStrictHardMode);
     }
 
     result = <>
@@ -298,6 +303,18 @@ export default function Reconstructor() {
       <p>Select a row and choose one of the guesses below.</p>
 
       {shareInfo.isHardMode ? <p>This was played in Hard Mode, so once you select a guess, guesses from other rows that are no longer possible will be grayed out.</p> : null}
+
+      {shareInfo.isHardMode && shareInfo.game.hardMode === HardMode.Lax ?
+        <div className="checkbox">
+          <input type="checkbox" id="use-strict-hard-mode" checked={useStrictHardMode} onChange={e => setUseStrictHardMode(e.target.checked)}></input>
+          {" "}
+          <label htmlFor="use-strict-hard-mode">
+            Every hint has been used
+            <br/>
+            <small>{shareInfo.game.info.name} has a lax Hard Mode that still allows some impossible guesses</small>
+          </label>
+        </div> : null
+      }
 
       <p>{shareInfo.game.info.name} {shareInfo.solutionId ? `#${shareInfo.solutionId}` : null} {shareInfo.date ? `on ${renderDate(shareInfo.date)}` : null}</p>
 
